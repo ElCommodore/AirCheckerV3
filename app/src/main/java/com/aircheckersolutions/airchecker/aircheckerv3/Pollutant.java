@@ -1,6 +1,5 @@
 package com.aircheckersolutions.airchecker.aircheckerv3;
 
-
 public class Pollutant {
 
     String name;

@@ -1,5 +1,7 @@
 package com.aircheckersolutions.airchecker.aircheckerv3;
 
+
+import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,24 +21,27 @@ import android.view.ViewGroup;
 
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     ListView listview;
+
+    Pollutant[] pollutants;
+    Pollen[] pollen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,11 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+
+                String httpCode = GetWebsite("https://api.waqi.info/feed/here/?token=16be779fb1a58ee9de6a3f1848a345ada4f4bfc6");
+
+
+                Snackbar.make(view, httpCode, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -72,6 +81,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public String GetWebsite(String website){
+        String resString = "";
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet(website);
+        try{
+            HttpResponse response;
+            response = httpclient.execute(httpget);
+            HttpEntity entity = response.getEntity();
+            InputStream is = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is,"windows-1251"),8);
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while((line = reader.readLine()) !=  null){
+                sb.append(line + "\n");
+            }
+            resString = sb.toString();
+            is.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "ERROR!", Toast.LENGTH_SHORT).show();
+        }
+        return  resString;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
