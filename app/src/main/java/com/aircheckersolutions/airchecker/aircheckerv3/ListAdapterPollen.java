@@ -9,13 +9,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class ListAdapterPollutant extends BaseAdapter{
+public class ListAdapterPollen extends BaseAdapter{
 
     Context context;
     Pollutant[] data;
     private static LayoutInflater inflater = null;
 
-    public ListAdapterPollutant(Context context, Pollutant[] data) {
+    public ListAdapterPollen(Context context, Pollutant[] data) {
         // TODO Auto-generated constructor stub
         this.context = context;
         this.data = data;
@@ -43,15 +43,15 @@ public class ListAdapterPollutant extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolderPollutant holder;
+        ViewHolderPollen holder;
         if (convertView == null){
             convertView = inflater.inflate(R.layout.listitem_pollutant, null);
-            holder = new ViewHolderPollutant();
+            holder = new ViewHolderPollen();
             holder.txtname = (TextView) convertView.findViewById(R.id.text_item);
             holder.prgbar = (ProgressBar) convertView.findViewById(R.id.progressBar);
             convertView.setTag(holder);
         }else{
-            holder = (ViewHolderPollutant) convertView.getTag();
+            holder = (ViewHolderPollen) convertView.getTag();
         }
 
         TextView text = (TextView) convertView.findViewById(R.id.text_item);
@@ -62,7 +62,7 @@ public class ListAdapterPollutant extends BaseAdapter{
     }
 }
 
-class ViewHolderPollutant{
+class ViewHolderPollen{
     ImageView imgview;
     TextView txtname;
     ProgressBar prgbar;

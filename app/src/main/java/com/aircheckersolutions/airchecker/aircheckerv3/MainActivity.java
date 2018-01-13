@@ -23,6 +23,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import org.json.*;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -30,26 +37,49 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    TextView result;
     private ViewPager mViewPager;
     ListView listview;
 
-    Pollutant[] pollutants;
-    Pollen[] pollen;
+    public Pollutant[] pollutants;
+    public Pollen[] pollen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        result = findViewById(R.id.textViewjs);
+
+        pollutants = new Pollutant[6];
+        pollutants[0] = new Pollutant("PM25",0.0f,true);
+        pollutants[1] = new Pollutant("PM10",0.0f,true);
+        pollutants[2] = new Pollutant("Ozone",0.0f,true);
+        pollutants[3] = new Pollutant("Nitrogene Dioxide",0.0f,true);
+        pollutants[4] = new Pollutant("Sulfur Dioxide",0.0f,true);
+        pollutants[5] = new Pollutant("Carbone Monooxide",0.0f,true);
+
+        pollen = new Pollen[8];
+        pollen[0] = new Pollen("Ambrosia","",true);
+        pollen[1] = new Pollen("Beifuß","",true);
+        pollen[2] = new Pollen("Birke","",true);
+        pollen[3] = new Pollen("Erle","",true);
+        pollen[4] = new Pollen("Esche","",true);
+        pollen[5] = new Pollen("Gräser","",true);
+        pollen[6] = new Pollen("Haselnuss","",true);
+        pollen[7] = new Pollen("Roggen","",true);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -70,15 +100,71 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String httpCode = GetWebsite("https://api.waqi.info/feed/here/?token=16be779fb1a58ee9de6a3f1848a345ada4f4bfc6");
+                try {
+                    JSONObject obj = new JSONObject(httpCode);
+                    pollutants[0].currentValue = Float.parseFloat(obj.getJSONObject("data").getJSONObject("iaqi").getJSONObject("pm25").getString("v"));
+                    pollutants[1].currentValue = Float.parseFloat(obj.getJSONObject("data").getJSONObject("iaqi").getJSONObject("pm10").getString("v"));
+                    pollutants[2].currentValue = Float.parseFloat(obj.getJSONObject("data").getJSONObject("iaqi").getJSONObject("o3").getString("v"));
+                    pollutants[3].currentValue = Float.parseFloat(obj.getJSONObject("data").getJSONObject("iaqi").getJSONObject("no2").getString("v"));
+                    pollutants[4].currentValue = Float.parseFloat(obj.getJSONObject("data").getJSONObject("iaqi").getJSONObject("so2").getString("v"));
+                    pollutants[5].currentValue = Float.parseFloat(obj.getJSONObject("data").getJSONObject("iaqi").getJSONObject("co").getString("v"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                }
 
 
-                Snackbar.make(view, httpCode, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                GetWebsiteJS();
+
+//                Snackbar.make(view, doc.text(), Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
+
+
             }
         });
 
 
 
+    }
+
+    public Pollutant[] GetPollutants(){
+        return pollutants;
+    }
+
+    private void GetWebsiteJS() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final StringBuilder builder = new StringBuilder();
+                final String[] pollenValues = new String[8];
+                try {
+                    Document doc = Jsoup.connect("http://www.wetter.com/gesundheit/pollenflug/").get();
+                    String title = doc.title();
+                    Elements links = doc.select("a[href]");
+                    Elements myin = doc.getElementsByClass("text--small portable-hide");
+                    int counter = 0;
+                    for (Element item : myin) {
+                        System.out.println(item.childNode(0).toString());
+                        pollenValues[counter] = item.childNode(0).toString();
+                        counter++;
+                    }
+
+                } catch (IOException e) {
+                    builder.append("Error : ").append(e.getMessage()).append("\n");
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //result.setText(builder.toString());
+                        for(int i = 0; i<8;i++){
+                            pollen[i].currentValue = pollenValues[i];
+                            result.setText(pollenValues[6]);
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
     public String GetWebsite(String website){
