@@ -1,6 +1,13 @@
 package com.aircheckersolutions.airchecker.aircheckerv3;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +19,10 @@ import android.widget.TextView;
 public class ListAdapterPollen extends BaseAdapter{
 
     Context context;
-    Pollutant[] data;
+    Pollen[] data;
     private static LayoutInflater inflater = null;
 
-    public ListAdapterPollen(Context context, Pollutant[] data) {
+    public ListAdapterPollen(Context context, Pollen[] data) {
         // TODO Auto-generated constructor stub
         this.context = context;
         this.data = data;
@@ -45,25 +52,55 @@ public class ListAdapterPollen extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolderPollen holder;
         if (convertView == null){
-            convertView = inflater.inflate(R.layout.listitem_pollutant, null);
+            convertView = inflater.inflate(R.layout.listitem_pollen, null);
             holder = new ViewHolderPollen();
-            holder.txtname = (TextView) convertView.findViewById(R.id.text_item);
-            holder.prgbar = (ProgressBar) convertView.findViewById(R.id.progressBar);
+            holder.txtname = (TextView) convertView.findViewById(R.id.txt_name_Pollen);
+            holder.txtvalue = (TextView) convertView.findViewById(R.id.txt_currentValue_Pollen);
+            holder.prgbar = (ProgressBar) convertView.findViewById(R.id.progressBar_Pollen);
+            holder.myView = (View) convertView.findViewById(R.id.myRectangleView_Pollen);
+            holder.imgview = (ImageView) convertView.findViewById(R.id.iv_item_Pollen);
+
             convertView.setTag(holder);
         }else{
             holder = (ViewHolderPollen) convertView.getTag();
         }
 
-        TextView text = (TextView) convertView.findViewById(R.id.text_item);
+        Drawable background;
+        GradientDrawable gradientDrawable;
+
+        background = holder.myView.getBackground();
+        gradientDrawable = (GradientDrawable) background;
+
+        switch (data[position].status){
+            case 0:
+                gradientDrawable.setColor(ContextCompat.getColor(context,R.color.aqiGood));
+                break;
+            case 30:
+                gradientDrawable.setColor(ContextCompat.getColor(context,R.color.aqiMedium));
+                break;
+            case 60:
+                gradientDrawable.setColor(ContextCompat.getColor(context,R.color.aqiBad));
+                break;
+            case 90:
+                gradientDrawable.setColor(ContextCompat.getColor(context,R.color.aqiHazard));
+                break;
+        }
+
         holder.txtname.setText(data[position].name);
-        holder.prgbar.setProgress((int)(data[position].currentValue*100));
+        holder.txtvalue.setText(data[position].currentValue);
+        holder.prgbar.setMax(90);
+        holder.prgbar.setProgress(data[position].status);
+        holder.imgview.setImageResource(data[position].resID);
         //convertView.setBackgroundResource(R.drawable.smiley_happy);
         return convertView;
     }
+
 }
 
 class ViewHolderPollen{
+    View myView;
     ImageView imgview;
     TextView txtname;
+    TextView txtvalue;
     ProgressBar prgbar;
 }

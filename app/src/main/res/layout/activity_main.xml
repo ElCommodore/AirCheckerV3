@@ -44,15 +44,20 @@
             android:layout_height="600dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/btn_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/container"
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="9dp"
-            app:srcCompat="@android:drawable/ic_dialog_email" />
+            app:srcCompat="@drawable/button_refresh_icon"
+            android:scaleType="fitCenter"
+            />
+
+
     </RelativeLayout>
 
 
