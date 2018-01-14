@@ -46,16 +46,14 @@
 
         <ImageButton
             android:id="@+id/btn_settings"
-            android:background="@android:color/transparent"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/container"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="end|bottom"
-            android:layout_marginEnd="9dp"
-            app:srcCompat="@drawable/button_refresh_icon"
+            android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            />
+            app:srcCompat="@drawable/button_refresh_icon" />
 
 
     </RelativeLayout>

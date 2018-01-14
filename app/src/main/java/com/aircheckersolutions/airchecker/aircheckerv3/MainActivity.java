@@ -67,21 +67,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         pollutants = new Pollutant[6];
-        pollutants[0] = new Pollutant("PM25",0.0f,true, R.drawable.bgitemtest);
-        pollutants[1] = new Pollutant("PM10",0.0f,true, R.drawable.bgitemtest);
-        pollutants[2] = new Pollutant("Ozone",0.0f,true, R.drawable.bgitemtest);
-        pollutants[3] = new Pollutant("Nitrogene Dioxide",0.0f,true, R.drawable.bgitemtest);
-        pollutants[4] = new Pollutant("Sulfur Dioxide",0.0f,true, R.drawable.bgitemtest);
-        pollutants[5] = new Pollutant("Carbone Monooxide",0.0f,true, R.drawable.bgitemtest);
+        pollutants[0] = new Pollutant("PM25",0.0f,true, R.drawable.bgpollutantpm25);
+        pollutants[1] = new Pollutant("PM10",0.0f,true, R.drawable.bgpollutantpm10);
+        pollutants[2] = new Pollutant("Ozone",0.0f,true, R.drawable.bgpollutantozone);
+        pollutants[3] = new Pollutant("Nitrogene Dioxide",0.0f,true, R.drawable.bgpollutantno2);
+        pollutants[4] = new Pollutant("Sulfur Dioxide",0.0f,true, R.drawable.bgpollutantso2);
+        pollutants[5] = new Pollutant("Carbone Monooxide",0.0f,true, R.drawable.bgpollutantco);
 
         pollen = new Pollen[8];
-        pollen[0] = new Pollen("Ambrosia","",true, R.drawable.bgitemtest);
-        pollen[1] = new Pollen("Beifuß","",true, R.drawable.bgitemtest);
-        pollen[2] = new Pollen("Birke","",true, R.drawable.bgitemtest);
-        pollen[3] = new Pollen("Erle","",true, R.drawable.bgitemtest);
-        pollen[4] = new Pollen("Esche","",true, R.drawable.bgitemtest);
+        pollen[0] = new Pollen("Ambrosia","",true, R.drawable.bgpollenambrosia);
+        pollen[1] = new Pollen("Beifuß","",true, R.drawable.bgpollenbeifuss);
+        pollen[2] = new Pollen("Birke","",true, R.drawable.bgpollenbirke);
+        pollen[3] = new Pollen("Erle","",true, R.drawable.bgpollenerle);
+        pollen[4] = new Pollen("Esche","",true, R.drawable.bgpollenesche);
         pollen[5] = new Pollen("Gräser","",true, R.drawable.bgpollengrass);
-        pollen[6] = new Pollen("Haselnuss","",true, R.drawable.bgitemtest);
+        pollen[6] = new Pollen("Haselnuss","",true, R.drawable.bgpollenhaselnuss);
         pollen[7] = new Pollen("Roggen","",true, R.drawable.bgpollenrye);
 
         // Create the adapter that will return a fragment for each of the three
