@@ -19,6 +19,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url 'http://sdk.uxcam.com/android/'
+    }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
@@ -29,4 +35,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation files('libs/jsoup-1.11.2.jar')
     implementation files('libs/json-20160810.jar')
+    compile 'com.uxcam:uxcam:2.6.2@aar'
 }
